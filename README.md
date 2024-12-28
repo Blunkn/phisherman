@@ -15,12 +15,22 @@ If you are who I think you are, please don't OSA me. I didn't lift any code from
     - Recipient Name & Email Address
     - Return Path
     - Date & Time Sent
+    - SPF, DKIM, and DMARC verification
+    - Links, Attachments, and Attachment Hashes
 - Outputs all this data into a .txt file in the output folder.
 
 ## Dependencies
 ---
 - Python 3.13 or above.
 https://www.python.org/downloads/ Download the latest *stable* version(not pre-release, etc). When installing, check the "add to PATH" option. I'm pretty sure there was one.
+
+- Python dependencies:
+    - dnspython
+    - dkimpy
+    - beautifulsoup4
+    - extract-msg
+    - typing
+Use "pip install" then the dependency name as an argument on Command Prompt to install.
 
 ## How to Use
 ---
@@ -33,9 +43,12 @@ https://www.python.org/downloads/ Download the latest *stable* version(not pre-r
 ## Issues
 ---
 - Recipient email address shows up on "Recipient Name" instead of "Recipient Address". Currently determining if this is an email thing or a skill issue from me.
-- Script not yet able to authenticate SPF, DKIM, and DMARC.
-- Script not yet able to extract links & attachments.
 
 ## Version Control
 ---
+v1.1 - 
+- added SPF/DKIM/DMARC verification
+- can now extract most links & attachments
+- can now extract most attachment hashes
+
 v1.0 - initial commit
