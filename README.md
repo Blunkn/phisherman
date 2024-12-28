@@ -30,6 +30,7 @@ https://www.python.org/downloads/ Download the latest *stable* version(not pre-r
     - beautifulsoup4
     - extract-msg
     - typing
+
 Use "pip install" then the dependency name as an argument on Command Prompt to install.
 
 ## How to Use
