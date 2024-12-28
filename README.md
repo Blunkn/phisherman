@@ -45,6 +45,10 @@ Use "pip install" then the dependency name as an argument on Command Prompt to i
 ---
 - Recipient email address shows up on "Recipient Name" instead of "Recipient Address". Currently determining if this is an email thing or a skill issue from me.
 
+## Roadmap
+---
+- Extraction of actual email content in raw text, if any.
+
 ## Version Control
 ---
 v1.1 - 
