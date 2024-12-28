@@ -21,7 +21,7 @@ If you are who I think you are, please don't OSA me. I didn't lift any code from
 
 ## Dependencies
 ---
-- Python 3.13 or above.
+- Python 3.7 or above.
 https://www.python.org/downloads/ Download the latest *stable* version(not pre-release, etc). When installing, check the "add to PATH" option. I'm pretty sure there was one.
 
 - Python dependencies:
