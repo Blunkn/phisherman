@@ -50,11 +50,11 @@ def verify_spf(sender_domain:str, sender_ip:str) -> Dict[str, Optional[str]]:
             'details':f"Found record: {record}"
         }
     
-    except Exception:
+    except Exception as e:
         return {
             'status':'Error',
             'record':None,
-            'details':f"Error: {str(Exception)}"
+            'details':f"Error: {str(e)}"
         }
 
 
@@ -93,11 +93,11 @@ def verify_dkim(content:bytes, domain:str) -> Dict[str, Optional[str]]:
                 'details':f"Verification error: {str(dkim.DKIMException)}"
             }
         
-    except Exception:
+    except Exception as e:
         return {
             'status':'Error',
             'record':None,
-            'details':f"DKIM processing error: {str(Exception)}"
+            'details':f"DKIM processing error: {str(e)}"
         }
     
 

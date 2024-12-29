@@ -53,7 +53,7 @@ class Phisherman:
                         'filename': filename,
                         'content_type': part.get_content_type(),
                         'size': len(data),
-                        'hashes': self.calculate_hash(data)
+                        'hashes': self.get_hash(data)
                     }
                     
                     # Save attachment
@@ -77,7 +77,7 @@ class Phisherman:
                     'filename': attachment.filename,
                     'content_type': attachment.mimetype,
                     'size': len(data),
-                    'hashes': self.calculate_hash(data)
+                    'hashes': self.get_hash(data)
                 }
                 
                 # Save attachment
@@ -156,8 +156,8 @@ class Phisherman:
 
             return headers
         
-        except Exception:
-            return f"Error: {str(Exception)}"
+        except Exception as e:
+            return f"Error: {str(e)}"
         
     def parse_msg(self, msgpath):
         """parse outlook emails"""
@@ -201,8 +201,8 @@ class Phisherman:
             }
             return headers
         
-        except Exception:
-            return f"Error: {str(Exception)}"
+        except Exception as e:
+            return f"Error: {str(e)}"
         
     # --- PROCESSORS ---
     def save_text(self, headers: Dict[str, str], filename: str) -> Path:
@@ -274,11 +274,13 @@ class Phisherman:
             else:
                 continue
 
-            if headers: # if anything got extracted,
+            if isinstance(headers, dict): # if anything got extracted,
                 output_path = self.save_text(headers, f.name)
                 processed+=1
                 print(f"Email processed. Saved to {output_path}\n")
                 print(f"Emails processed: {processed}")
+            else:
+                print(f"Error processing {f.name}: {headers}")
 
         return processed
     

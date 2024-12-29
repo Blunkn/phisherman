@@ -51,6 +51,10 @@ Use "pip install" then the dependency name as an argument on Command Prompt to i
 
 ## Version Control
 ---
+v1.2 -
+- fixed naming conventions causing crashes
+- fixed error handling not outputting exact errors
+
 v1.1 - 
 - added SPF/DKIM/DMARC verification
 - can now extract most links & attachments
