@@ -2,6 +2,8 @@ import dns.resolver, dkim
 from typing import Dict, Optional
 
 # --- SPF ---
+# SPF means sender policy framework
+# SPF helps verify if the server sending an email is authorized to send mail for that domain, reducing email spoofing.
 def verify_spf(sender_domain:str, sender_ip:str) -> Dict[str, Optional[str]]:
     """
     verify SPF record for email
@@ -59,6 +61,10 @@ def verify_spf(sender_domain:str, sender_ip:str) -> Dict[str, Optional[str]]:
 
 
 # --- DKIM ---
+# DKIM means domain keys identified mail
+
+# DKIM adds a digital signature to emails that receivers can verify to 
+# ensure the email wasn't altered in transit and came from the claimed domain.
 def verify_dkim(content:bytes, domain:str) -> Dict[str, Optional[str]]:
     """
     verify DKIM signature
@@ -102,6 +108,8 @@ def verify_dkim(content:bytes, domain:str) -> Dict[str, Optional[str]]:
     
 
 # --- DMARC ---
+# stands for domain-based message authentication, reporting, and conformance
+# builds on SPF and DKIM by letting domain owners specify how to handle emails that fail authentication
 def verify_dmarc(domain:str) -> Dict[str, Optional[str]]:
     """
     verify DMARC record

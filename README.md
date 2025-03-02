@@ -1,5 +1,7 @@
 # Phisherman
 ---
+## Version 1.3
+---
 
 An email metadata extractor. Designed to determine if an email could be a phish or not.
 
@@ -47,10 +49,14 @@ Use "pip install" then the dependency name as an argument on Command Prompt to i
 
 ## Roadmap
 ---
-- Extraction of actual email content in raw text, if any.
+- N/A
 
 ## Version Control
 ---
+v1.3 -
+- script can now extract email content, albeit with a lot of newlines
+- attachments are now neatly saved into a folder with the email subject for its name
+
 v1.2 -
 - fixed naming conventions causing crashes
 - fixed error handling not outputting exact errors

@@ -127,11 +127,14 @@ class Phisherman:
 
             # get links
             links = []
+            emlcontent = ""
             for i in msg.walk():
                 if i.get_content_type() == 'text/plain':
                     links.extend(self.get_links(i.get_content()))
+                    emlcontent += i.get_content()
                 elif i.get_content_type() == 'text/html':
                     soup = BeautifulSoup(i.get_content(), 'html.parser')
+
                     for j in soup.find_all('a'):
                         href=j.get('href')
                         if href and href.startswith(('http://', 'https://')):
@@ -151,7 +154,8 @@ class Phisherman:
                     'dmarc':dmarc
                 },
                 'links':list(set(links)), # set used to remove dupes
-                'attachments':self.get_attachments_eml(msg)
+                'attachments':self.get_attachments_eml(msg),
+                'content':emlcontent or 'None'
             }
 
             return headers
@@ -182,7 +186,6 @@ class Phisherman:
                     href = link.get('href')
                     if href and href.startswith(('http://', 'https://')):
                         links.append(href)
-
             headers = {
                 'subject':msg.subject or 'Untitled',
                 'sender_name':sender_name,
@@ -197,7 +200,8 @@ class Phisherman:
                     'dmarc':dmarc
                 },
                 'links':list(set(links)),
-                'attachments':self.get_attachments_msg(msg)
+                'attachments':self.get_attachments_msg(msg),
+                'content':msg.body or msg.html or 'None'
             }
             return headers
         
@@ -208,6 +212,15 @@ class Phisherman:
     def save_text(self, headers: Dict[str, str], filename: str) -> Path:
         """saves content to output dir & file"""
         output_file = self.output / f"{self.sanitise_filename(filename)}_results.txt"
+        foldername = self.sanitise_filename(headers.get('subject', 'Untitled'))
+        attachment_folder_path = self.output / f"{foldername}_attachments"
+        attachment_folder_path.mkdir(exist_ok=True)
+        for i in headers.get('attachments', []):
+            if 'saved_path' in i:
+                original_name = Path(i['saved_path']).name
+                newpath = attachment_folder_path / original_name
+                os.rename(i['saved_path'], newpath)
+                i['saved_path'] = str(newpath)
         with open(output_file, 'a', encoding='utf-8') as f:
             # basic headers
             f.write(f"Subject: {headers.get('subject', 'N/A')}\n")
@@ -256,6 +269,10 @@ class Phisherman:
                     f.write(f"  SHA256: {i['hashes']['sha256']}\n")
             else:
                 f.write("No attachments found.\n")
+
+            # email content
+            f.write('\nEmail Content:\n')
+            f.write(f"{headers.get('content', 'None')}")
 
         return output_file
 
