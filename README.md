@@ -5,7 +5,7 @@
 
 An email metadata extractor. Designed to determine if an email could be a phish or not.
 
-Inspired by a program I happened upon during my service in the DIS.
+Inspired by a program I happened upon during my military service.
 
 If you are who I think you are, please don't OSA me. I didn't lift any code from inside.
 
