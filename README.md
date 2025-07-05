@@ -1,6 +1,6 @@
 # Phisherman
 ---
-## Version 1.3
+## Version 1.0.0
 ---
 
 An email metadata extractor. Designed to determine if an email could be a phish or not.
@@ -34,6 +34,12 @@ https://www.python.org/downloads/ Download the latest *stable* version(not pre-r
     - typing
 
 Use "pip install" then the dependency name as an argument on Command Prompt to install.
+Example:
+`pip install dnspython`
+
+Alternatively, while on a command interpreter on the `packages` folder, run this command:
+`pip install --find-links . --no-index *`
+This installs pre-downloaded dependencies that come with this repo.
 
 ## How to Use
 ---
@@ -53,6 +59,11 @@ Use "pip install" then the dependency name as an argument on Command Prompt to i
 
 ## Version Control
 ---
+1.0.0
+- transition to semantic versioning
+- added more elaborate docstrings for each function
+- added .whl files of dependencies + requirements.txt in a "packages" folder
+
 v1.3 -
 - script can now extract email content, albeit with a lot of newlines
 - attachments are now neatly saved into a folder with the email subject for its name

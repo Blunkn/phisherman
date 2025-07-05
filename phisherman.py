@@ -1,12 +1,15 @@
+# native libaries
 import os, re, email, datetime, sys, hashlib
 from email import policy
-from extract_msg import Message
 from pathlib import Path
 from typing import Dict, Optional, Union
 from urllib.parse import unquote
-from bs4 import BeautifulSoup
-
+# from mods
 from mods.authentication import verify_dkim, verify_dmarc, verify_spf
+
+# 3rd-party libraries
+from bs4 import BeautifulSoup
+from extract_msg import Message
 
 class Phisherman:
     def __init__(self):
@@ -18,7 +21,15 @@ class Phisherman:
         self.output.mkdir(exist_ok=True)
 
     def get_hash(self, data:bytes) -> Dict[str, str]:
-        """get MD5, SHA1, SHA256 hashes"""
+        """
+        get MD5, SHA1, SHA256 hashes
+        
+        args:
+        data(bytes) - get hash of input file in bytes
+
+        returns:
+        hashes(dict) - hashes in md5, sha1, and sha256
+        """
         return {
             'md5':hashlib.md5(data).hexdigest(),
             'sha1':hashlib.sha1(data).hexdigest(),
@@ -26,7 +37,15 @@ class Phisherman:
         }
     
     def get_links(self, content:str) -> list:
-        """get links"""
+        """
+        get links
+        
+        args:
+        content(str) - email content in str
+
+        returns:
+        links(list) - list of regex-captured URLs
+        """
         regex = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
         
         # Find all URLs and decode any URL encoding
@@ -38,7 +57,16 @@ class Phisherman:
         return links
     
     def get_attachments_eml(self, msg) -> list:
-        """extract gmail attachments"""
+        """
+        extract gmail attachments
+        
+        args:
+        msg(file) - input .eml file
+
+        returns:
+        attachments(list) - list of attachments found in email;
+        will also be extracted & saved alongside email
+        """
         attachments = []
         
         for part in msg.walk():
@@ -67,7 +95,16 @@ class Phisherman:
         return attachments
 
     def get_attachments_msg(self, msg) -> list:
-        """extract outlook attachments"""
+        """
+        extract outlook attachments
+        
+        args:
+        msg(file) - input .msg file
+
+        returns:
+        attachments(list) - list of attachments found in email;
+        will also be extracted & saved alongside email
+        """
         attachments = []
         
         for attachment in msg.attachments:
@@ -91,13 +128,29 @@ class Phisherman:
         return attachments
 
     def sanitise_filename(self, filename):
-        """sanitise input filename for output lol"""
+        """
+        sanitise input filename for output lol
+        
+        args:
+        filename(str) - file name
+
+        returns:
+        name(str) - sanitised & formatted file name        
+        """
         name = re.sub(r'[<>:"/\\|?*]', '_', filename)
         name = name.strip('. ')
         return name if name else 'Untitled'
     
     def extract_email_address(self, email_string: str) -> tuple:
-        """extract email address and display name"""
+        """
+        extract email address and display name
+        
+        args:
+        email_string(str) - email content in str form, i think
+
+        returns:
+        tuple of email addresses & their respective aliases
+        """
         if not email_string: # checks if input is empty
             return ('', '')
         
@@ -109,7 +162,15 @@ class Phisherman:
 
     # --- PARSERS ---
     def parse_eml(self, emlpath):
-        """parse gmail emails"""
+        """
+        parse gmail emails
+        
+        args:
+        emlpath(path) - path to .eml file
+
+        returns:
+        headers(dict) - metadata of email
+        """
         try:
             with open(emlpath, 'rb') as f:
                 content = f.read()
@@ -164,7 +225,15 @@ class Phisherman:
             return f"Error: {str(e)}"
         
     def parse_msg(self, msgpath):
-        """parse outlook emails"""
+        """
+        parse outlook emails
+        
+        args:
+        msgpath(path) - path to .msg file
+
+        returns:
+        headers(dict) - metadata of email
+        """
         try:
             msg = Message(str(msgpath))
 
@@ -210,7 +279,16 @@ class Phisherman:
         
     # --- PROCESSORS ---
     def save_text(self, headers: Dict[str, str], filename: str) -> Path:
-        """saves content to output dir & file"""
+        """
+        saves content to output dir & file
+        
+        args:
+        headers(dict) - metadata from parser functions
+        filename(str) - file names in str form
+
+        returns:
+        output_file(path) - path to created output results file
+        """
         output_file = self.output / f"{self.sanitise_filename(filename)}_results.txt"
         foldername = self.sanitise_filename(headers.get('subject', 'Untitled'))
         attachment_folder_path = self.output / f"{foldername}_attachments"
@@ -277,7 +355,12 @@ class Phisherman:
         return output_file
 
     def process_email(self) -> int:
-        """determine whether email is .eml or .msg, and handle it appropriately"""
+        """
+        determine whether email is .eml or .msg, and handle it appropriately
+        
+        returns:
+        processed(int) - counter on how many emails have been processed
+        """
         processed = 0
 
         for f in self.input.iterdir():
@@ -314,7 +397,7 @@ def help():
     print(help_text)
 
 def menu():
-    print("\nPhisherman")
+    print("\nPhisherman 1.0.0")
     print("Please choose an option:")
     print("1 - Process emails")
     print("2 - Help")

@@ -1,12 +1,23 @@
-import dns.resolver, dkim
+# native libaries
 from typing import Dict, Optional
+
+# 3rd-party libraries
+import dns.resolver, dkim
 
 # --- SPF ---
 # SPF means sender policy framework
-# SPF helps verify if the server sending an email is authorized to send mail for that domain, reducing email spoofing.
+# SPF helps verify if the server sending an email is authorised to send mail for that domain
+# this helps detect email spoofing
 def verify_spf(sender_domain:str, sender_ip:str) -> Dict[str, Optional[str]]:
     """
     verify SPF record for email
+
+    args:
+    sender_domain(str) - domain name of sender email address
+    sender_ip(str) - IP address of sender
+
+    returns:
+    SPF results(dict) - contains status, records, details
     """
     try:
         if not sender_domain or not sender_ip: # account for missing domain or IP
@@ -64,10 +75,17 @@ def verify_spf(sender_domain:str, sender_ip:str) -> Dict[str, Optional[str]]:
 # DKIM means domain keys identified mail
 
 # DKIM adds a digital signature to emails that receivers can verify to 
-# ensure the email wasn't altered in transit and came from the claimed domain.
+# ensure the email wasn't altered in transit and came from the claimed domain
 def verify_dkim(content:bytes, domain:str) -> Dict[str, Optional[str]]:
     """
     verify DKIM signature
+
+    args:
+    content(bytes) - email content in bytes
+    domain(str) - domain keys in str form
+
+    returns:
+    DKIM results(dict) - contains status, records, details
     """
     try:
         if not content:
@@ -113,6 +131,12 @@ def verify_dkim(content:bytes, domain:str) -> Dict[str, Optional[str]]:
 def verify_dmarc(domain:str) -> Dict[str, Optional[str]]:
     """
     verify DMARC record
+
+    args:
+    domain(str) - domain name of sender email
+
+    returns:
+    DMARC results(dict) - contains status, records, details
     """
     try:
         if not domain:
@@ -153,7 +177,7 @@ def verify_dmarc(domain:str) -> Dict[str, Optional[str]]:
                 'details':'No DMARC record found'
             }
         
-        # Parse basic DMARC policy
+        # parse basic DMARC policy
         policy = 'none'  # default
         for tag in record.split(';'):
             tag = tag.strip()
