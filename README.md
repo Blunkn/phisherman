@@ -34,16 +34,22 @@ https://www.python.org/downloads/ Download the latest *stable* version(not pre-r
     - typing
 
 Use "pip install" then the dependency name as an argument on Command Prompt to install.
+
 Example:
-`pip install dnspython`
+```
+pip install dnspython
+```
 
 Alternatively, while on a command interpreter on the `packages` folder, run this command:
-`pip install --find-links . --no-index *`
+```
+pip install --find-links . --no-index *
+```
 This installs pre-downloaded dependencies that come with this repo.
 
 ## How to Use
 ---
 - Download the repo as a .zip file. Extract all of it out.
+- Remember to install dependencies if you haven't already.
 - When your File Explorer is on the directory the .py program is on, click on the directory bar and type "cmd".
 - Type in the command "py phisherman.py" to run it.
 - Ensure files you wanna process are in input folder, run the program on Command Prompt, and it will extract text in output folder.
